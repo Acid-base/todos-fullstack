@@ -1,6 +1,6 @@
 import express from 'express'
 
-// import 'dotenv/config'
+import 'dotenv/config'
 
 import mongoConfig from './config.js'
 
@@ -9,6 +9,8 @@ import todoRoutes from './routes/todoRoutes.js'
 const app = express()
 
 const port = 8080
+
+app.use(express.json())
 
 app.use('/api/todos', todoRoutes)
 
