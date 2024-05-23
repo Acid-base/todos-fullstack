@@ -2,19 +2,25 @@ import { useState, useRef, useEffect } from 'react'
 
 import './App.css'
 
+const BASE_URL = 'http://localhost:8080/api/todos'
+
 function App() {
 
+  const [isLoading, setIsLoading] = useState(false)
   const [todos, setTodos] = useState([])
 
   useEffect(() => {
     async function getTodos() {
       try {
-        const response = await fetch('http://localhost:8080/api/todos')
+        setIsLoading(true)
+        const response = await fetch(BASE_URL)
         const data = await response.json()
         console.log(data)
-        setTodos(data)
+        setTodos(data)  
       } catch(err) {
         console.log(err)
+      } finally {
+        setIsLoading(false)
       }
     }
     getTodos()
@@ -45,13 +51,18 @@ function App() {
         <button>Add Todo</button>
       </form>
       <br/><br/>
-      {todos.map((todo) => 
-        <p 
-          style={{ textDecoration: todo.complete ? 'line-through' : '' }} 
-          key={todo.text}>
-            {todo.text}
-        </p>
-      )}
+        {
+          isLoading ?
+            <p>Loading...</p>
+            :
+          todos.map((todo) => 
+              <p 
+                style={{ textDecoration: todo.complete ? 'line-through' : '' }} 
+                key={todo._id}>
+                  {todo.text}
+              </p>
+          )
+        }
     </>
   )
 }
