@@ -31,8 +31,28 @@ function App() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    console.log(textRef.current.value)
-    console.log(completeRef.current.checked)
+    const body = {
+      text: textRef.current.value,
+      completed: completeRef.current.checked,
+      user: 'bob'
+    }
+    console.log(body, JSON.stringify(body))
+    try {
+      setIsLoading(true)
+      const response = await fetch(BASE_URL, {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const newTodo = await response.json()
+      setTodos([...todos, newTodo])
+    } catch(err) {
+      console.log(err)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -57,7 +77,7 @@ function App() {
             :
           todos.map((todo) => 
               <p 
-                style={{ textDecoration: todo.complete ? 'line-through' : '' }} 
+                style={{ textDecoration: todo.completed ? 'line-through' : '' }} 
                 key={todo._id}>
                   {todo.text}
               </p>
