@@ -55,6 +55,20 @@ function App() {
     }
   }
 
+  async function handleDelete(id) {
+    try {
+      setIsLoading(true)
+      await fetch(`${BASE_URL}/${id}`, {
+        method: 'DELETE'
+      })
+      setTodos(todos.filter(todo => todo._id !== id))
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <>
       <h1>Todos</h1>
@@ -79,7 +93,12 @@ function App() {
               <p 
                 style={{ textDecoration: todo.completed ? 'line-through' : '' }} 
                 key={todo._id}>
-                  {todo.text}
+                  {todo.text} 
+                  <span 
+                    onClick={() => handleDelete(todo._id)} 
+                    style={{ marginLeft: '15px', fontWeight: '500', cursor: 'pointer' }}>
+                      X
+                  </span>
               </p>
           )
         }
