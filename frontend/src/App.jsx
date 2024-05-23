@@ -1,23 +1,24 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 import './App.css'
 
-let starterTodos = [
-  {
-    text: "finish frontend",
-    complete: false,
-    user: 'bob'
-  },
-  {
-    text: "sleep",
-    complete: false,
-    user: 'bob'
-  }
-]
-
 function App() {
 
-  const [todos, setTodos] = useState(starterTodos)
+  const [todos, setTodos] = useState([])
+
+  useEffect(() => {
+    async function getTodos() {
+      try {
+        const response = await fetch('http://localhost:8080/api/todos')
+        const data = await response.json()
+        console.log(data)
+        setTodos(data)
+      } catch(err) {
+        console.log(err)
+      }
+    }
+    getTodos()
+  }, [])
 
   const textRef = useRef()
   const completeRef = useRef()
@@ -45,7 +46,11 @@ function App() {
       </form>
       <br/><br/>
       {todos.map((todo) => 
-        <p key={todo.text}>{todo.text}</p>
+        <p 
+          style={{ textDecoration: todo.complete ? 'line-through' : '' }} 
+          key={todo.text}>
+            {todo.text}
+        </p>
       )}
     </>
   )
