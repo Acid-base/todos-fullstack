@@ -36,7 +36,6 @@ function App() {
       completed: completeRef.current.checked,
       user: 'bob'
     }
-    console.log(body, JSON.stringify(body))
     try {
       setIsLoading(true)
       const response = await fetch(BASE_URL, {
@@ -48,6 +47,8 @@ function App() {
       })
       const newTodo = await response.json()
       setTodos([...todos, newTodo])
+      textRef.current.value = ''
+      completeRef.current.checked = false
     } catch(err) {
       console.log(err)
     } finally {
