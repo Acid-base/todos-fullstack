@@ -2,7 +2,11 @@ import { useState, useRef, useEffect } from 'react'
 
 import './App.css'
 
-const BASE_URL = 'http://localhost:8080/api/todos'
+console.log(import.meta.env)
+
+const BASE_URL = import.meta.env.DEV ? 
+'http://localhost:8080/api/todos' : 
+'https://todos-backend-ybjq.onrender.com/api/todos'
 
 function App() {
 
